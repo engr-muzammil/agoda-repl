@@ -1,17 +1,17 @@
 import { NestFactory } from '@nestjs/core';
+import { AuthModule } from './auth.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ReservationsModule } from './reservations.module';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ReservationsModule);
+  const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-  }));
+      whitelist: true,
+    }));
   app.useLogger(app.get(Logger));
-  console.log(`Reservations service running on port ${configService.get('PORT')}`);
-  await app.listen(configService.get('PORT') || 2000);
+  console.log(`Auth service running on port ${configService.get('PORT')}`);
+  await app.listen(configService.get('PORT') || 2001);
 }
 bootstrap();
